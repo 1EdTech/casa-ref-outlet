@@ -1933,28 +1933,29 @@ form[data-type="query"] input[type="submit"] {
 .icon {
   height: 60px;
   width: 60px;
+  margin: 0 auto 10px;
 }
-/* line 49, ../../../src/app/view/common.scss */
+/* line 50, ../../../src/app/view/common.scss */
 .icon img {
   height: 60px;
   width: 60px;
 }
-/* line 53, ../../../src/app/view/common.scss */
+/* line 54, ../../../src/app/view/common.scss */
 .icon.missing {
   background-image: url("../img/blank-icon.png");
 }
 
-/* line 58, ../../../src/app/view/common.scss */
+/* line 59, ../../../src/app/view/common.scss */
 .scrollable {
   overflow: scroll;
 }
 
-/* line 62, ../../../src/app/view/common.scss */
+/* line 63, ../../../src/app/view/common.scss */
 small, .app-row figure figcaption, .app-list figure figcaption {
   font-size: 0.9em;
 }
 
-/* line 66, ../../../src/app/view/common.scss */
+/* line 67, ../../../src/app/view/common.scss */
 a:hover {
   text-decoration: none;
 }
@@ -1989,14 +1990,10 @@ a:hover {
   margin: 0;
 }
 /* line 31, ../../../src/app/view/app-row.scss */
-.app-row .icon {
-  margin: 0 auto 10px;
-}
-/* line 35, ../../../src/app/view/app-row.scss */
 .app-row figure {
   padding: 0;
 }
-/* line 38, ../../../src/app/view/app-row.scss */
+/* line 34, ../../../src/app/view/app-row.scss */
 .app-row figure figcaption {
   text-align: center;
 }

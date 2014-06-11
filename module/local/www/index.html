@@ -2,11 +2,90 @@
 <html lang="en">
 
 <head>
-    <title>CASA</title>
+    <title>CASA Mobile</title>
+    <link rel="stylesheet" href="../apps/blocks/blocks.css">
+    <script type="text/javascript" src="../apps/blocks/blocks.js"></script>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        figure { width: 80px; float: left; font-size: 12px; text-align: center; overflow: hidden; margin: 10px; }
+    </style>
 </head>
 
 <body>
 
+<header>
+    <h1><a href=".">CASA Mobile</a></h1>
+</header>
+
+<main style="margin:auto;">
+
+</main>
+
+<script type="text/javascript">
+(function(){
+
+    var key = 'casa-apps',
+        apps = localStorage.getItem(key),
+        $main = $('main'),
+        fixSpacing = function(currentTop){
+            $('main').css('width', 'auto')
+            var $apps = $('main .app figure'), $eles, currentHeight = 0;
+            if(!currentTop)
+                currentTop = $apps.first().offset().top
+            $eles = $apps.filter(function(){
+                return $(this).offset().top == currentTop;
+            })
+            $eles.each(function(){
+                if($(this).height() > currentHeight)
+                    currentHeight = $(this).height();
+            })
+            $eles.css('height', currentHeight + 'px')
+
+            $eles = $apps.filter(function(){
+                return $(this).offset().top > currentTop;
+            })
+            if($eles.length)
+                fixSpacing($eles.first().offset().top)
+            else
+                fixContainerSpacing()
+        },
+        fixContainerSpacing = function(){
+            $('main').css('width', 'auto')
+            var $eles = $('main .app figure'),
+                $ele = $eles.first(),
+                figureWidth = $ele.outerWidth()
+                                + parseInt($ele.css('margin-left').replace('px',''))
+                                + parseInt($ele.css('margin-right').replace('px','')),
+                rowTop = $ele.offset().top,
+                    eleCount = $eles.filter(function(){ return $(this).offset().top == rowTop }).length
+            $('main').css('width', (figureWidth * eleCount) + 'px');
+        };
+
+    apps = apps ? JSON.parse(apps) : [];
+
+    $.each(apps, function(_, app){
+        var str = '<a href="'+app.uri+'" class="app"><figure>';
+        if(app.icon && app.icon.length > 0)
+            str += '<div class="icon"><img src="'+app.icon+'"></div>';
+        else
+            str += '<div class="icon missing"></div>';
+        str += '<figcaption>'+app.title+'</figcaption></figure></a>';
+        $main.append(str)
+    });
+
+    fixSpacing();
+
+    var resizeTimer;
+    $(window).resize(function() {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(function(){
+            fixSpacing();
+        }, 100);
+    });
+
+})();
+</script>
 </body>
 
 </html>

@@ -1,5 +1,5 @@
 require 'pathname'
-require 'casa/outlet/app/root'
+require 'casa/outlet/app/apps'
 require 'casa/outlet/app/lti'
 require 'casa/outlet/app/local'
 
@@ -10,8 +10,8 @@ BASE_PATH = Pathname.new(__FILE__).parent
 
 routes = { }
 
-CASA::Outlet::App::Root.set :public_folder, BASE_PATH + 'www'
-routes['/'] = CASA::Outlet::App::Root
+CASA::Outlet::App::Apps.set :public_folder, BASE_PATH + 'www'
+routes['/apps'] = CASA::Outlet::App::Apps
 
 if ENABLE_LTI
   CASA::Outlet::App::Lti.set :static, true

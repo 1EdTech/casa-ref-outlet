@@ -52,16 +52,19 @@ App.Controller.Details = {
 
             var key = 'casa-apps',
                 currentApps = localStorage.getItem(key),
-                appAttributes = $.extend({}, details.attributes.use, details.attributes.require),
+                appAttributes = $.extend({}, details.attributes, details.attributes.use, details.attributes.require),
                 app = {
                   'id': details.identity.id,
                   'originator_id': details.identity.originator_id,
+                  'uri': appAttributes.uri,
                   'title': appAttributes.title,
                   'categories': appAttributes.categories,
                   'tags': appAttributes.tags,
                   'authors': appAttributes.authors,
                   'organizations': appAttributes.organizations
                 }
+
+            console.log(app)
 
             currentApps = currentApps ? JSON.parse(currentApps) : [];
 
