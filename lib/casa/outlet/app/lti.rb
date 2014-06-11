@@ -20,11 +20,7 @@ module CASA
 
         end
 
-        get '/' do
-          redirect to '/index.html'
-        end
-
-        post '/lti/launch' do
+        post '/launch' do
 
           return erb :error unless authorize!
 
@@ -37,7 +33,7 @@ module CASA
 
         end
 
-        get '/lti/consumer' do
+        get '/consumer' do
           if session['launch_params']
             key = session['launch_params']['oauth_consumer_key']
           else
@@ -46,7 +42,7 @@ module CASA
           end
         end
 
-        post '/lti/consumer' do
+        post '/consumer' do
 
           if session['launch_params']
             key = session['launch_params']['oauth_consumer_key']
