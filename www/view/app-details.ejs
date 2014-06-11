@@ -7,7 +7,11 @@
     </div>
 
     <div class="float-right">
-        <div class="icon"></div>
+        <% if(app.attributes.use.icon && app.attributes.use.icon.length > 0) { %>
+        <div class="icon"><img src="<%= app.attributes.use.icon %>" class="icon"></div>
+        <% }else{ %>
+        <div class="icon missing"></div>
+        <% } %>
         <div class="add-app-button btn btn-xs btn-success">Add App</div>
     </div>
 

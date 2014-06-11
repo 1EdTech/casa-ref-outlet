@@ -1931,23 +1931,30 @@ form[data-type="query"] input[type="submit"] {
 
 /* line 46, ../../../src/app/view/common.scss */
 .icon {
-  background-color: #ccc;
-  border-radius: 10px;
   height: 60px;
   width: 60px;
 }
-
+/* line 49, ../../../src/app/view/common.scss */
+.icon img {
+  height: 60px;
+  width: 60px;
+}
 /* line 53, ../../../src/app/view/common.scss */
+.icon.missing {
+  background-image: url("../img/blank-icon.png");
+}
+
+/* line 58, ../../../src/app/view/common.scss */
 .scrollable {
   overflow: scroll;
 }
 
-/* line 57, ../../../src/app/view/common.scss */
+/* line 62, ../../../src/app/view/common.scss */
 small, .app-row figure figcaption, .app-list figure figcaption {
   font-size: 0.9em;
 }
 
-/* line 61, ../../../src/app/view/common.scss */
+/* line 66, ../../../src/app/view/common.scss */
 a:hover {
   text-decoration: none;
 }

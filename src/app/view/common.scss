@@ -44,10 +44,15 @@ form[data-type="query"] {
 }
 
 .icon {
-  background-color: #ccc;
-  border-radius: 10px;
   height: 60px;
   width: 60px;
+  img {
+    height: 60px;
+    width: 60px;
+  }
+  &.missing {
+    background-image: url("../img/blank-icon.png");
+  }
 }
 
 .scrollable {
