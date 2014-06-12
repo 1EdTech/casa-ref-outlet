@@ -15,8 +15,8 @@ App.Controller.SearchCollection = {
         })
         $region.find('.scrollable ul:not(.one-line)').each(function(){
           var $this = $(this), width = 0;
-          $this.find('> li > *').each(function(){
-            width += $(this).outerWidth(true);
+          $this.find('> li > a').each(function(){
+            width += $(this).outerWidth() + parseInt($(this).css('margin-left').replace('px','')) + parseInt($(this).css('margin-right').replace('px','')) + 1;
           })
           $this.css('width', width);
         });
