@@ -8,14 +8,21 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
-        figure { width: 80px; float: left; font-size: 12px; text-align: center; overflow: hidden; margin: 10px; }
+        body { margin: 0px 10px; }
+        figure { width: 84px; float: left; font-size: 12px; text-align: center; overflow: hidden; margin: 0 12px 12px 12px; }
     </style>
 </head>
 
 <body>
 
-<header>
-    <h1><a href=".">CASA Mobile</a></h1>
+<header style="position:relative;">
+    <figure style="position:absolute; right: 0; margin:0;">
+        <a href="apps.html">
+            <img src="../apps/img/casa.png" height="32" width="32" alt="Get Apps">
+            <figcaption style="font-size:10px; padding-top:2px;">Add Apps</figcaption>
+        </a>
+    </figure>
+    <h1 style="padding:10px 0;"><a href=".">CASA Mobile</a></h1>
 </header>
 
 <main style="margin:auto;">
@@ -65,6 +72,7 @@
     apps = apps ? JSON.parse(apps) : [];
 
     $.each(apps, function(_, app){
+        console.log(app)
         var str = '<a href="'+app.uri+'" class="app"><figure>';
         if(app.icon && app.icon.length > 0)
             str += '<div class="icon"><img src="'+app.icon+'"></div>';

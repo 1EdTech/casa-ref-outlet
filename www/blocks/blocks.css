@@ -1933,7 +1933,7 @@ form[data-type="query"] input[type="submit"] {
 .icon {
   height: 60px;
   width: 60px;
-  margin: 0 auto 10px;
+  margin: 0 auto 3px;
 }
 /* line 50, ../../../src/app/view/common.scss */
 .icon img {

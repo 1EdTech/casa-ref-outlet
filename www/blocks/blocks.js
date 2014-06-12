@@ -10321,14 +10321,13 @@ EJS.Helpers.prototype = {
                   'id': details.identity.id,
                   'originator_id': details.identity.originator_id,
                   'uri': appAttributes.uri,
+                  'icon': appAttributes.icon,
                   'title': appAttributes.title,
                   'categories': appAttributes.categories,
                   'tags': appAttributes.tags,
                   'authors': appAttributes.authors,
                   'organizations': appAttributes.organizations
                 }
-
-            console.log(app)
 
             currentApps = currentApps ? JSON.parse(currentApps) : [];
 
