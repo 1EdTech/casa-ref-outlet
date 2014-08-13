@@ -10,6 +10,46 @@
     <style>
         body { margin: 0px 10px; }
         figure { width: 84px; float: left; font-size: 12px; text-align: center; overflow: hidden; margin: 0 12px 12px 12px; }
+
+        div.drag-region, span.delete-button { display: none; }
+        .editing-apps img { opacity: 0.4; }
+        .editing-apps div.drag-region {
+            display: block;
+            position: absolute;
+            top: 0px;
+            bottom: 0px;
+            left: 0px;
+            right: 0px;
+            z-index: 10;
+            font-weight: bold;
+            padding-top: 8px;
+            font-weight: bold;
+            color: #666;
+            font-size: 32px;
+        }
+        .editing-apps span.delete-button{
+            position: absolute;
+            top: 0px;
+            right: 10px;
+            cursor:pointer;
+            color: #fff;
+            border: 1px solid #AEAEAE;
+            border-radius: 30px;
+            background: #605F61;
+            font-size: 24px;
+            line-height:1;
+            font-weight: bold;
+            display: inline-block;
+            line-height: 0px;
+            padding: 6px 1px 11px 1px;
+            z-index: 100;
+        }
+        .editing-apps span.delete-button:before { content: "×"; }
+        .editing-apps span.delete-button:hover { color: #ddd; }
+        .when-editing { display: none; }
+        .editing-apps .when-editing { display: block; }
+        .editing-apps .when-not-editing { display: none; }
+        figure { position: relative; padding-top:2px; }
     </style>
 </head>
 
@@ -25,74 +65,160 @@
     <h1 style="padding:10px 0;"><a href=".">CASA Mobile</a></h1>
 </header>
 
-<main style="margin:auto;">
+<main style="margin:auto auto 15px auto; overflow:auto;">
 
 </main>
 
+<footer>
+    <nav style="text-align:center;">
+        <div class="when-not-editing">
+            <a href="apps.html">Add Apps</a> | <a href="#" data-start-edit-apps>Edit Apps</a>
+        </div>
+        <div class="when-editing">
+            <a href="#" data-stop-edit-apps>Stop Edit Apps</a>
+        </div>
+    </nav>
+</footer>
+
 <script type="text/javascript">
-(function(){
 
-    var key = 'casa-apps',
-        apps = localStorage.getItem(key),
-        $main = $('main'),
-        fixSpacing = function(currentTop){
-            $('main').css('width', 'auto')
-            var $apps = $('main .app figure'), $eles, currentHeight = 0;
-            if(!currentTop)
-                currentTop = $apps.first().offset().top
-            $eles = $apps.filter(function(){
-                return $(this).offset().top == currentTop;
-            })
-            $eles.each(function(){
-                if($(this).height() > currentHeight)
-                    currentHeight = $(this).height();
-            })
-            $eles.css('height', currentHeight + 'px')
+    /**
+     * Access and manage apps
+     */
 
-            $eles = $apps.filter(function(){
-                return $(this).offset().top > currentTop;
-            })
-            if($eles.length)
-                fixSpacing($eles.first().offset().top)
-            else
-                fixContainerSpacing()
-        },
-        fixContainerSpacing = function(){
-            $('main').css('width', 'auto')
-            var $eles = $('main .app figure'),
-                $ele = $eles.first(),
-                figureWidth = $ele.outerWidth()
-                                + parseInt($ele.css('margin-left').replace('px',''))
-                                + parseInt($ele.css('margin-right').replace('px','')),
-                rowTop = $ele.offset().top,
-                    eleCount = $eles.filter(function(){ return $(this).offset().top == rowTop }).length
-            $('main').css('width', (figureWidth * eleCount) + 'px');
-        };
+    (function(){
 
-    apps = apps ? JSON.parse(apps) : [];
+        var localStorageKey = 'casa-apps',
 
-    $.each(apps, function(_, app){
-        console.log(app)
-        var str = '<a href="'+app.uri+'" class="app"><figure>';
-        if(app.icon && app.icon.length > 0)
-            str += '<div class="icon"><img src="'+app.icon+'"></div>';
-        else
-            str += '<div class="icon missing"></div>';
-        str += '<figcaption>'+app.title+'</figcaption></figure></a>';
-        $main.append(str)
-    });
+            appContainerSelector = 'main',
 
-    fixSpacing();
+            AppDashboard = function(element){
 
-    var resizeTimer;
-    $(window).resize(function() {
-        clearTimeout(resizeTimer);
-        resizeTimer = setTimeout(function(){
-            fixSpacing();
-        }, 100);
-    });
+                var $container = $(element);
 
-})();
+                this.clear = function(){
+                    $container.html('')
+                }
+
+                this.render = function(apps){
+                    $.each(apps, function(_, app){
+                        var str = '<a href="'+app.uri+'" class="app" data-app="'+JSON.stringify(app).replace(/"/g, '&quot;')+'"><figure>';
+                        str += '<div class="drag-region">&hArr;</div>'
+                        str += '<span class="delete-button"></span>';
+                        if(app.icon && app.icon.length > 0)
+                            str += '<div class="icon"><img src="'+app.icon+'"></div>';
+                        else
+                            str += '<div class="icon missing"></div>';
+                        str += '<figcaption>'+app.title+'</figcaption></figure></a>';
+                        $container.append(str)
+                    });
+                    $container.find('.delete-button').click(function(e){
+                        e.preventDefault();
+                        $(this).closest('.app').remove();
+                    })
+                    $container.find('.drag-region').click(function(e){
+                        e.preventDefault();
+                    })
+                }
+
+                this.getApps = function(){
+                    return $container.find('.app').map(function(){
+                        return JSON.parse($(this).attr('data-app'))
+                    }).get();
+                }
+
+                this.startEdit = function(){
+                    $('body').addClass('editing-apps');
+                }
+
+                this.stopEdit = function(){
+                    $('body').removeClass('editing-apps');
+                }
+
+            },
+
+            AppStorage = function(key){
+                this.get = function(){
+                    var apps = localStorage.getItem(key)
+                    return apps ? JSON.parse(apps) : [];
+                }
+                this.set = function(apps){
+                    localStorage.setItem(key, JSON.stringify(apps))
+                }
+            },
+
+            apps = new AppStorage(localStorageKey),
+
+            dashboard = new AppDashboard(appContainerSelector)
+
+        dashboard.render(apps.get())
+
+        $('[data-stop-edit-apps]').click(function(){
+            dashboard.stopEdit();
+            apps.set(dashboard.getApps())
+        });
+
+        $('[data-start-edit-apps]').click(function(){
+            dashboard.startEdit();
+        });
+
+    })();
+
+    /**
+     * Presentational stuff to keep the apps centered on the page regardless of the container size
+     */
+
+    (function(){
+
+        var fixSpacing = function(currentTop){
+                    $('main').css('width', 'auto')
+                    var $apps = $('main .app figure'),
+                            $eles,
+                            currentHeight = 0;
+                    if(!currentTop)
+                        currentTop = $apps.first().offset().top
+                    $eles = $apps.filter(function(){
+                        return $(this).offset().top == currentTop;
+                    })
+                    $eles.each(function(){
+                        if($(this).height() > currentHeight)
+                            currentHeight = $(this).height();
+                    })
+                    $eles.css('height', currentHeight + 'px')
+
+                    $eles = $apps.filter(function(){
+                        return $(this).offset().top > currentTop;
+                    })
+                    if($eles.length)
+                        fixSpacing($eles.first().offset().top)
+                    else
+                        fixContainerSpacing()
+                },
+                fixContainerSpacing = function(){
+                    $('main').css('width', 'auto')
+                    var $eles = $('main .app figure'),
+                            $ele = $eles.first(),
+                            figureWidth = $ele.outerWidth()
+                                    + parseInt($ele.css('margin-left').replace('px',''))
+                                    + parseInt($ele.css('margin-right').replace('px','')),
+                            rowTop = $ele.offset().top,
+                            eleCount = $eles.filter(function(){ return $(this).offset().top == rowTop }).length
+                    $('main').css('width', (figureWidth * eleCount) + 'px');
+                };
+
+        // Fix spacing when the page loads
+        fixSpacing();
+
+        // Fix spacing after the page is resized
+        var resizeTimer;
+        $(window).resize(function() {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(function(){
+                fixSpacing();
+            }, 100);
+        });
+
+    })();
 </script>
 </body>
 
