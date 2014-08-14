@@ -5,6 +5,8 @@
     <title>CASA Mobile</title>
     <link rel="stylesheet" href="../apps/blocks/blocks.css">
     <script type="text/javascript" src="../apps/blocks/blocks.js"></script>
+    <link rel="stylesheet" href="assets/jquery-ui.css">
+    <script type="text/javascript" src="assets/jquery-ui.js"></script>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
@@ -65,7 +67,7 @@
     <h1 style="padding:10px 0;"><a href=".">CASA Mobile</a></h1>
 </header>
 
-<main style="margin:auto auto 15px auto; overflow:auto;">
+<main style="margin:auto auto 15px auto; overflow:auto; position: relative;">
 
 </main>
 
@@ -116,8 +118,24 @@
                         e.preventDefault();
                         $(this).closest('.app').remove();
                     })
-                    $container.find('.drag-region').click(function(e){
-                        e.preventDefault();
+                    $container.find('.app').sortable({
+                        connectWith: ".app",
+                        handle: ".drag-region",
+                        stop: function(event, ui){
+                            var $movingElement = $(this)
+                            $container.find('.app figure').each(function(){
+                                // if less than 45, we need to keep traveling to find the right row
+                                if(!(ui.offset.top - this.getBoundingClientRect().top < 45))
+                                    return true;
+                                // if less than 0, we're to left of element
+                                if(!(ui.offset.left - this.getBoundingClientRect().left < 0))
+                                    return true;
+
+                                $movingElement.detach();
+                                $(this).closest('.app').before($movingElement)
+                                return false;
+                            })
+                        }
                     })
                 }
 
