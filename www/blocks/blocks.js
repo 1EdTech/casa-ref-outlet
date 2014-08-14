@@ -10253,7 +10253,7 @@ EJS.Helpers.prototype = {
 };;
 ;App.Config = {
   title: 'CASA',
-  footer: '[[Copyright Notice Here]]'
+  footer: 'Copyright &copy; 2014 UC Regents.'
 };;
 ;var Engine = {};;
 ;Engine.Config = {

@@ -1947,7 +1947,7 @@ form[data-type="query"] input[type="submit"] {
 
 /* line 59, ../../../src/app/view/common.scss */
 .scrollable {
-  overflow: scroll;
+  overflow: auto;
 }
 
 /* line 63, ../../../src/app/view/common.scss */
