@@ -94,6 +94,8 @@ module CASA
 
           params = {
             'content_items' => generate_content_items(content_item).to_json,
+            'lti_message_type' => 'ContentItemSelectionResponse',
+            'lti_version' => 'LTI-1p0',
             'oauth_version' => @tp.oauth_version,
             'oauth_nonce' => SecureRandom.hex,
             'oauth_timestamp' => Time.now.to_i,
