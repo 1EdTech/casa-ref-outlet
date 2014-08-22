@@ -1,9 +1,9 @@
-require 'sinatra/base'
+require 'casa/outlet/app/app'
 
 module CASA
   module Outlet
     module App
-      class Apps < Sinatra::Base
+      class Apps < App
 
         get '/' do
           redirect to '/index.html'

@@ -1,6 +1,6 @@
 require 'securerandom'
 require 'open-uri'
-require 'sinatra/base'
+require 'casa/outlet/app/app'
 require 'casa/outlet/ims/lti/content_item_tool_provider'
 require 'oauth'
 require 'oauth/request_proxy/rack_request'
@@ -8,12 +8,11 @@ require 'oauth/request_proxy/rack_request'
 module CASA
   module Outlet
     module App
-      class Lti < Sinatra::Base
+      class Lti < App
 
         configure do
 
           enable :sessions
-          set :protection, :except => :frame_options
           set :oauth_creds, {
             "demo" => "secret"
           }
